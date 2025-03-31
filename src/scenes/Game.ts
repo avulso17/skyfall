@@ -1,9 +1,11 @@
 import { Scene } from "phaser";
 
+import { Explosion } from "../objects/Explosion";
 import { Player } from "../objects/Player";
 import { PowerUp } from "../objects/PowerUp";
 import { Ship } from "../objects/Ship";
 import { Shoot } from "../objects/Shoot";
+import { zeroPad } from "../utils/zeroPad";
 
 type ShipGeneric = Phaser.GameObjects.Sprite;
 
@@ -20,6 +22,8 @@ export class Game extends Scene {
   cursorsKeys?: Phaser.Types.Input.Keyboard.CursorKeys;
   spacebar?: Phaser.Input.Keyboard.Key;
   projectiles: Phaser.GameObjects.Group;
+  scoreLabel: Phaser.GameObjects.BitmapText;
+  score: number = 0;
 
   constructor() {
     super("Game");
@@ -101,6 +105,24 @@ export class Game extends Scene {
       undefined,
       this
     );
+
+    const scoreBackground = this.add.graphics();
+    scoreBackground.fillStyle(0x000000, 1);
+    scoreBackground.beginPath();
+    scoreBackground.moveTo(0, 0);
+    scoreBackground.lineTo(width, 0);
+    scoreBackground.lineTo(width, 20);
+    scoreBackground.lineTo(0, 20);
+    scoreBackground.closePath();
+    scoreBackground.fillPath();
+
+    this.scoreLabel = this.add.bitmapText(
+      10,
+      5,
+      "pixelFont",
+      `SCORE ${zeroPad(this.score, 6)}`,
+      16
+    );
   }
 
   update() {
@@ -113,7 +135,9 @@ export class Game extends Scene {
     this.movePlayerManager();
 
     if (Phaser.Input.Keyboard.JustDown(this.spacebar!)) {
-      this.shoot();
+      if (this.player.active) {
+        this.shoot();
+      }
     }
 
     // Update projectiles for performance issues
@@ -164,17 +188,23 @@ export class Game extends Scene {
   destroyShip(pointer: Phaser.Input.Pointer, gameObject: ShipGeneric) {
     gameObject.setTexture("explosion");
     gameObject.play("explode");
+    // gameObject.destroy();
   }
 
   hitEnemy(enemie: ShipGeneric, projectile: Shoot) {
+    let explosion = new Explosion(this, enemie.x, enemie.y);
+
     projectile.destroy();
     this.resetShipPos(enemie);
+
+    this.score += 15;
+    this.scoreLabel.setText(`SCORE ${zeroPad(this.score, 6)}`);
   }
 
   hurtPlayer(player: Player, enemy: ShipGeneric) {
-    this.resetShipPos(enemy);
-    player.x = this.scale.width / 2 - 8;
-    player.y = this.scale.height - 64;
+    this.player.hurt(() => {
+      this.resetShipPos(enemy);
+    });
   }
 
   movePlayerManager() {
