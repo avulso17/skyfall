@@ -24,6 +24,19 @@ export class Game extends Scene {
   projectiles: Phaser.GameObjects.Group;
   scoreLabel: Phaser.GameObjects.BitmapText;
   score: number = 0;
+  shootSound: Phaser.Sound.BaseSound;
+  explosionSound: Phaser.Sound.BaseSound;
+  pickupSound: Phaser.Sound.BaseSound;
+  music: Phaser.Sound.BaseSound;
+  musicConfig: Phaser.Types.Sound.SoundConfig = {
+    mute: false,
+    volume: 1,
+    rate: 1,
+    detune: 0,
+    seek: 0,
+    loop: false,
+    delay: 0,
+  };
 
   constructor() {
     super("Game");
@@ -123,6 +136,8 @@ export class Game extends Scene {
       `SCORE ${zeroPad(this.score, 6)}`,
       16
     );
+
+    this.createSounds();
   }
 
   update() {
@@ -150,8 +165,18 @@ export class Game extends Scene {
     }
   }
 
+  createSounds() {
+    this.shootSound = this.sound.add("audio_shoot");
+    this.explosionSound = this.sound.add("audio_explosion");
+    this.pickupSound = this.sound.add("audio_pickup");
+    this.music = this.sound.add("music");
+
+    this.music.play(this.musicConfig);
+  }
+
   shoot() {
     let bullet = new Shoot(this);
+    this.shootSound.play();
   }
 
   addPowerUp() {
@@ -165,6 +190,7 @@ export class Game extends Scene {
 
   pickPowerUp(player: Player, powerUp: PowerUp) {
     powerUp.disableBody(true, true);
+    this.pickupSound.play();
   }
 
   destroyShoot(powerUp: PowerUp, projectile: Shoot) {
@@ -199,6 +225,7 @@ export class Game extends Scene {
 
     this.score += 15;
     this.scoreLabel.setText(`SCORE ${zeroPad(this.score, 6)}`);
+    this.explosionSound.play();
   }
 
   hurtPlayer(player: Player, enemy: ShipGeneric) {

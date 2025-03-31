@@ -26,6 +26,18 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
 
+    // sounds
+    this.load.audio("audio_shoot", ["sounds/beam.ogg", "sounds/beam.mp3"]);
+    this.load.audio("audio_explosion", [
+      "sounds/explosion.ogg",
+      "sounds/explosion.mp3",
+    ]);
+    this.load.audio("audio_pickup", ["sounds/pickup.ogg", "sounds/pickup.mp3"]);
+    this.load.audio("music", [
+      "sounds/sci-fi_platformer12.ogg",
+      "sounds/sci-fi_platformer12.mp3",
+    ]);
+
     //fonts
     this.load.bitmapFont("pixelFont", "font/font.png", "font/font.xml");
 

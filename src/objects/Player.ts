@@ -33,6 +33,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       return;
     }
 
+    this.scene.sound.play("audio_explosion");
+
     let explosion = new Explosion(this.scene, this.x, this.y);
     this.disableBody(true, true);
 
