@@ -26,7 +26,40 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
 
-    this.load.image("logo", "logo.png");
+    this.load.spritesheet("player", "sprites/player.png", {
+      frameWidth: 16,
+      frameHeight: 24,
+    });
+
+    this.load.spritesheet("shoot", "sprites/beam.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("ship", "sprites/ship-spritesheet.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("ship2", "sprites/ship2-spritesheet.png", {
+      frameWidth: 32,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("ship3", "sprites/ship3-spritesheet.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
+    this.load.spritesheet("explosion", "sprites/explosion-spritesheet.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("power-up", "sprites/power-up-spritesheet.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {
@@ -34,6 +67,6 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start("MainMenu");
+    this.scene.start("Game");
   }
 }
