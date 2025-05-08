@@ -5,7 +5,7 @@ import { Player } from "../objects/Player";
 import { PowerUp } from "../objects/PowerUp";
 import { Ship } from "../objects/Ship";
 import { Shoot } from "../objects/Shoot";
-import { zeroPad } from "../utils/zeroPad";
+import { zeroPad } from "../utils/ZeroPad";
 
 type ShipGeneric = Phaser.GameObjects.Sprite;
 
